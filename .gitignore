@@ -1,2 +1,13 @@
-main.app
-test.app
+bird_flight.app
+program.exe
+*.log
+*.tmp
+*.bak
+.DS_Store
+.vscode/
+.idea/
+build/
+out/
+*.obj
+*.exe
+*.class
