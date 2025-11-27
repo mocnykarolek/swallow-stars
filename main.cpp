@@ -4,59 +4,10 @@ TODO:
 
 
 */
-#include <ncurses.h>
-#include <unistd.h> 
-#include <stdio.h>
-#include <string.h> 
-
-#include <cstdio> 
-#include <cstdlib>
-#define QUIT 'q'
-
-#define UP 'w'
-#define RIGHT 'd'
-#define DOWN 's'
-#define LEFT 'a'
-
-struct {
-    int width;
-    int height;
-
-} mainWindow;
-
-struct {
-    int position_x;
-    int position_y;
-    int dx, dy;
-    char symbol;
-} bird;
-
-
-
-int  gameSpeedReader(){
-
-    FILE *fptr;
-
-    fptr = fopen("config.txt", "r");
-
-    char buffor[100];
-
-    fgets(buffor, 100, fptr);
-
-
-
-    fclose(fptr);
-    
-
-
-    // printf("%s", buffor);
-
-
-    
-    
-    return atoi(buffor);
-    
-}
+#include "defs.hh"   // Żeby main znał struktury (Bird, Star)
+#include "actors.hh" // Żeby main mógł wywołać init_bird()
+#include "io.hh"     // Żeby main mógł wywołać draw_screen()
+#include "logic.hh"
 
 
 
@@ -64,58 +15,32 @@ int  gameSpeedReader(){
 
 
 void gameLoop(){
-    int main_delay = 100000;
-
-    initscr();
-    getmaxyx( stdscr, mainWindow.height, mainWindow.width);
-    noecho();
-    curs_set(0);
     
-    keypad( stdscr, TRUE );
-    raw();
-    noecho();
-    int start_y = (mainWindow.height - 24) / 2;
-    int start_x = (mainWindow.width - 80) / 2;
-    WINDOW *win = newwin(24, 80, start_y, start_x);
-
-    if (mainWindow.height < 24 || mainWindow.width < 80){
-        endwin();
-        printf("Size of terminal is too small for game window initialization\n");
-        return;
-    }
-
-
-
-    nodelay(win, TRUE);
-
-    keypad(win, TRUE);
-
-
-    int game_speed = 1;
-    double delay_temp = (gameSpeedReader()/100)*main_delay;
-    int delay = (int)delay_temp;
-    bird.symbol = '*';
+    
+    int delay = gamecfg.delay;
+    bird.symbol = '>';
     bird.position_x = 40;
     bird.position_y = 12;
 
-        
 
-    
-    box(win, 0, 0);
-    wrefresh(win);
+    box(gamecfg.win, 0, 0);
+    wrefresh(gamecfg.win);
 
 
     int gameStart = true;
 
     int input;
     while(gameStart){
-        mvwaddch(win, bird.position_y, bird.position_x, bird.symbol);
+
+
+
+        init_bird();
         
 
 
-        wrefresh(win);
+        wrefresh(gamecfg.win);
 
-        input = wgetch(win);
+        input = wgetch(gamecfg.win);
 
         switch(input){
             case UP:
@@ -146,31 +71,69 @@ void gameLoop(){
                 break;
 
         }
-        mvwaddch(win, bird.position_y, bird.position_x, ' ');
+        mvwaddch(gamecfg.win, bird.position_y, bird.position_x, ' ');
         
         bird.position_y += bird.dy;
         bird.position_x += bird.dx;
-        mvwaddch(win, bird.position_y, bird.position_x, bird.symbol);
+        mvwaddch(gamecfg.win, bird.position_y, bird.position_x, bird.symbol);
         
-        box(win, 0, 0);
+        box(gamecfg.win, 0, 0);
 
-        wrefresh(win);
+        wrefresh(gamecfg.win);
         usleep(delay);
+
     }
 
 
-    delwin(win);
-    endwin();
+
 
 
 }
 
+
+void screenInitialization(){
+    gamecfg.delay = 100000;
+
+    int congif_delay = gameSpeedReader();
+
+
+    initscr();
+    getmaxyx( stdscr, mainWindow.height, mainWindow.width);
+    noecho();
+    curs_set(0);
+    
+    keypad( stdscr, TRUE );
+    raw();
+    noecho();
+    int start_y = (mainWindow.height - 24) / 2;
+    int start_x = (mainWindow.width - 80) / 2;
+    gamecfg.win = newwin(24, 80, start_y, start_x);
+
+    if (mainWindow.height < 24 || mainWindow.width < 80){
+        endwin();
+        printf("Size of terminal is too small for game window initialization\n");
+        return;
+    }
+
+
+
+    nodelay(gamecfg.win, TRUE);
+
+    keypad(gamecfg.win, TRUE);
+
+
+
+}
+
+
 int main()
 {   
-
+    GameConfig gamecfg;
+    screenInitialization();
     gameLoop();
 
-
+    delwin(gamecfg.win);
+    endwin();
 
   return 0;
 }
