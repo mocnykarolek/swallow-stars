@@ -3,7 +3,10 @@
 #include "actors.hh"
 
 
-void draw_bird();
+void draw_bird(GameConfig *cfg);
 
+void screenInitialization(GameConfig *cfg);
 
-int gameSpeedReader();
+void deleteWindow(GameConfig *cfg);
+
+void gameSpeedReader(GameConfig *cfg);

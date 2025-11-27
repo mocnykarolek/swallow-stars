@@ -1,3 +1,6 @@
+#ifndef DEFS_HH
+#define DEFS_HH
+
 #include <ncurses.h>
 #include <unistd.h> 
 #include <stdio.h>
@@ -23,17 +26,18 @@ struct GameConfig {
 };
 
 
-struct mainWindow{
-    int width;
-    int height;
-};
-
-
 struct Bird {
     int position_x;
     int position_y;
     int dx, dy;
     char symbol;
+    int lives_remaining;
 };
 
-GameConfig gamecfg;
+struct star {
+    char symbol;
+    int speed;
+};
+
+
+#endif

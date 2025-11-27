@@ -1,5 +1,6 @@
 #include "actors.hh"
 
+Bird bird;
 
 void init_bird(){
 
