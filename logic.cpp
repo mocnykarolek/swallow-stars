@@ -20,6 +20,8 @@ void gameLoop(GameConfig *cfg){
     int input;
 
     init_bird();
+    delay = 100000; // temp solu
+
     while(gameStart){
 
 
