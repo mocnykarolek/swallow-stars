@@ -2,6 +2,15 @@
 
 
 
+void changeBirdDirection(){
+    bird.position_y += bird.dy;
+    bird.position_x += bird.dx;
+
+
+}
+
+
+
 void gameLoop(GameConfig *cfg){
     
     
@@ -20,14 +29,9 @@ void gameLoop(GameConfig *cfg){
     int input;
 
     init_bird();
-    delay = 100000; // temp solu
+
 
     while(gameStart){
-
-
-
-        
-        
 
 
         wrefresh(cfg->win);
@@ -61,11 +65,9 @@ void gameLoop(GameConfig *cfg){
                 break;
 
         }
-        mvwaddch(cfg->win, bird.position_y, bird.position_x, ' ');
-        
-        bird.position_y += bird.dy;
-        bird.position_x += bird.dx;
-        mvwaddch(cfg->win, bird.position_y, bird.position_x, bird.symbol);
+
+        updateBirdPosition(cfg);
+
         
         box(cfg->win, 0, 0);
 
