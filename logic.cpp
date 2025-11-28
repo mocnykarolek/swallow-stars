@@ -41,6 +41,7 @@ STARS* star_array(GameConfig *cfg){
     for (int i = 0; i < cfg->max_stars; i++)
     {
         stars[i].alive = 0;
+        stars[i].symbol = '*';
     }
     
 
@@ -57,7 +58,7 @@ void move_star(STARS *star){
 
 void gameLoop(GameConfig *cfg){
     
-    
+    srand(time(NULL));
     int delay = cfg->delay;
     bird.symbol = '>';
 
@@ -80,10 +81,30 @@ void gameLoop(GameConfig *cfg){
 
 
     while(gameStart){
-        srand(time(NULL));
-
         
-        drawStar(cfg, s[0]);
+        
+        if(rand() % 20 == 0){
+            for (int i = 0; i < cfg->max_stars; i++)
+            {
+                if(s[i].alive == 0){
+                    s[i].alive =1;
+                    s[i].position_x = rand() % (cfg->width -2) +1;
+                    s[i].position_y =1;
+                    drawStar(cfg, &s[i]);
+                    break;
+                }
+            }
+            
+        }
+
+        for (int i = 0; i < cfg->max_stars; i++)
+        {
+            if(s[i].alive == 1){
+                updateStarPosition(cfg , &s[i]);
+            }
+        }
+    
+        
 
         wrefresh(cfg->win);
 

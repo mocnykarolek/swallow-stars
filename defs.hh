@@ -31,6 +31,7 @@ struct GameConfig {
     int min_opps;
     
     int time;
+    
 
     WINDOW *win;    // Tu przechowuj wskaźnik na okno!
 };

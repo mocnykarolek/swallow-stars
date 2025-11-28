@@ -3,7 +3,12 @@
 #include "actors.hh" // Żeby main mógł wywołać init_bird()
 #include "io.hh"     // Żeby main mógł wywołać draw_screen()
 #include "logic.hh"
-// TODO: make bird bounce from border
+// TODO: spowolnic gwiazki
+// TODO: dodac kolizje z ptakiem i niszczyc gwizdki
+// TODO: dodac przeciwnikow
+// TODO: dodac kolory
+// TODO: dodac menu poczatkowe koncowe i menu pod grą
+
 
 
 int main()
