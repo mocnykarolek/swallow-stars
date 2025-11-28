@@ -1,6 +1,6 @@
 #include "io.hh" 
 #include "actors.hh"
-#include "logic.cpp"
+#include "logic.hh"
 
 void draw_bird(GameConfig *cfg){
 
@@ -23,15 +23,28 @@ void  confReader(GameConfig *cfg){
     fptr = fopen("config.txt", "r");
 
     char buffor[100];
-
+    // width
     fgets(buffor, 100, fptr);
     cfg->delay = atoi(buffor);
-
+    //height
     fgets(buffor, 100, fptr);
     cfg->width = atoi(buffor);
-
+    //delay
     fgets(buffor, 100, fptr);
     cfg->height = atoi(buffor);
+    // max stars
+    fgets(buffor, 100, fptr);
+    cfg->max_stars = atoi(buffor);
+    // min stars
+    fgets(buffor, 100, fptr);
+    cfg->min_stars = atoi(buffor);
+    // max opps
+    fgets(buffor, 100, fptr);
+    cfg->max_opps = atoi(buffor);
+    // min opps
+    fgets(buffor, 100, fptr);
+    cfg->min_stars = atoi(buffor);
+
 
     fclose(fptr);
     
@@ -73,6 +86,18 @@ void screenInitialization(GameConfig *cfg){
     keypad(cfg->win, TRUE);
 
 
+
+}
+
+
+void drawStar(GameConfig *cfg, STARS *s){
+    mvwaddch(cfg->win, s->position_y, s->position_x, s->symbol);
+}
+
+void updateStarPosition(GameConfig *cfg, STARS *s){
+    mvwaddch(cfg->win, s->position_y, s->position_x, ' ');
+    move_star(s);
+    mvwaddch(cfg->win, s->position_y, s->position_x, s->symbol);
 
 }
 

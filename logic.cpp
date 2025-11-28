@@ -11,13 +11,56 @@ void changeBirdDirection(){
 
 
 
+
+void detectBorderColission(GameConfig *cfg){
+
+    if (bird.position_x <= 0 || bird.position_x >= cfg->width){
+        bird.dx *=-1;
+    }
+    if (bird.position_y <= 0 || bird.position_y >= cfg->height){
+        bird.dy *=-1;
+    }
+}
+
+
+// STARS* init_star(){
+//     STARS* stars[] = new STARS;
+//     star->symbol = '*';
+//     star->speed = 1;
+//     star->position_y =1;
+//     star->position_x =1;
+//     star->alive = 1;
+
+//     return star;
+// }
+
+STARS* star_array(GameConfig *cfg){
+    
+
+    STARS* stars = new STARS[cfg->max_stars];
+    for (int i = 0; i < cfg->max_stars; i++)
+    {
+        stars[i].alive = 0;
+    }
+    
+
+    return stars;
+}
+
+void move_star(STARS *star){
+
+    star->position_y +=1;
+
+}
+
+
+
 void gameLoop(GameConfig *cfg){
     
     
     int delay = cfg->delay;
     bird.symbol = '>';
-    bird.position_x = 40;
-    bird.position_y = 12;
+
 
 
     box(cfg->win, 0, 0);
@@ -28,11 +71,19 @@ void gameLoop(GameConfig *cfg){
 
     int input;
 
-    init_bird();
+    init_bird(cfg);
+    
+    STARS* s = star_array(cfg);
+    
+    
+    
 
 
     while(gameStart){
+        srand(time(NULL));
 
+        
+        drawStar(cfg, s[0]);
 
         wrefresh(cfg->win);
 
@@ -56,6 +107,12 @@ void gameLoop(GameConfig *cfg){
                 bird.dx = game_speed;
                 bird.dy = 0;
                 break;
+            case FASTER:
+                break;
+
+            case SLOWER:
+                break;
+            
 
             case 'q':
                 gameStart = false;
@@ -65,6 +122,7 @@ void gameLoop(GameConfig *cfg){
                 break;
 
         }
+        detectBorderColission(cfg);
 
         updateBirdPosition(cfg);
 

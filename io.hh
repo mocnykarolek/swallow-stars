@@ -14,3 +14,7 @@ void deleteWindow(GameConfig *cfg);
 void confReader(GameConfig *cfg);
 
 void updateBirdPosition(GameConfig *cfg);
+
+void drawStar(GameConfig *cfg, STARS *s);
+
+void updateStarPosition(GameConfig *cfg, STARS *s);

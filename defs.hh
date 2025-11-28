@@ -17,11 +17,21 @@
 #define RIGHT 'd'
 #define DOWN 's'
 #define LEFT 'a'
+#define FASTER 'p'
+#define SLOWER 'o'
+
 
 struct GameConfig {
     int width;
     int height;
     int delay;      // Tu przechowuj main_delay
+    int max_stars;
+    int min_stars;
+    int max_opps;
+    int min_opps;
+    
+    int time;
+
     WINDOW *win;    // Tu przechowuj wskaźnik na okno!
 };
 
@@ -34,10 +44,17 @@ struct Bird {
     int lives_remaining;
 };
 
-struct star {
+struct STARS {
     char symbol;
     int speed;
+    int position_x;
+    int position_y;
+    int alive;
+
+
 };
+
+
 
 
 #endif
