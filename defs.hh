@@ -12,7 +12,7 @@
 
 
 #define QUIT 'q'
-#define game_speed 1
+
 #define UP 'w'
 #define RIGHT 'd'
 #define DOWN 's'

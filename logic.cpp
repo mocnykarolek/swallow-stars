@@ -55,9 +55,18 @@ void move_star(STARS *star){
 }
 
 
+void changeGameSpeed(){
+
+
+}
+
+
 
 void gameLoop(GameConfig *cfg){
     
+    int horizontalBirdspeed = (int)(cfg->width/cfg->height);
+    int verticalBirdSpeed = 1;
+
     srand(time(NULL));
     int delay = cfg->delay;
     bird.symbol = '>';
@@ -124,19 +133,19 @@ void gameLoop(GameConfig *cfg){
         switch(input){
             case UP:
                 bird.dx = 0;
-                bird.dy = -game_speed;
+                bird.dy = -verticalBirdSpeed;
                 break;
             case DOWN:
                 bird.dx = 0;
-                bird.dy = game_speed;
+                bird.dy = verticalBirdSpeed;
                 break;
 
             case LEFT:
-                bird.dx = -game_speed;
+                bird.dx = -horizontalBirdspeed;
                 bird.dy = 0;
                 break;
             case RIGHT:
-                bird.dx = game_speed;
+                bird.dx = horizontalBirdspeed;
                 bird.dy = 0;
                 break;
             case FASTER:

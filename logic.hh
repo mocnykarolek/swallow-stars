@@ -19,4 +19,7 @@ STARS* star_array(GameConfig *cfg);
 
 void move_star(STARS *star);
 
+void changeGameSpeed();
+
+
 #endif
