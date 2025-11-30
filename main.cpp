@@ -7,7 +7,7 @@
 // TODO: dodac kolizje z ptakiem i niszczyc gwizdki
 // TODO: dodac przeciwnikow
 // TODO: dodac kolory
-// TODO: dodac menu poczatkowe koncowe i menu pod grą
+
 
 
 

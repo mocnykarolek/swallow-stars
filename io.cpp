@@ -44,6 +44,10 @@ void  confReader(GameConfig *cfg){
     // min opps
     fgets(buffor, 100, fptr);
     cfg->min_stars = atoi(buffor);
+    // time left
+    fgets(buffor, 100, fptr);
+    cfg->time = atoi(buffor);
+    
 
 
     fclose(fptr);
@@ -101,23 +105,43 @@ void updateStarPosition(GameConfig *cfg, STARS *s){
 
 }
 
-void drawMenu(GameConfig *cfg, MenuCongif* menu){
-    MenuCongif* menuu = InitMenuconf(cfg);
+void drawMenu(MenuCongif* menu, Bird bird){
     
-    box(menuu->menu_win, 0,0);
+    werase(menu->menu_win);
+    box(menu->menu_win, 0,0);
+    mvwprintw(menu->menu_win, 2, 1, "TIME: %d DIRECTIONS [W,A,S,D] CHANGE SPEED [o/p] EXIT [q] POINTS: %d LIVES: %d",menu->time_left, menu->points, bird.lives_remaining);
 
-
+    wrefresh(menu->menu_win);
 }
+
+void gameover(GameConfig *cfg){
+    
+    nodelay(cfg->win, FALSE);
+    mvwprintw(cfg->win, cfg->height/2, (cfg->width/2) - 4, "GAMEOVER");
+    wgetch(cfg->win);
+}
+
 
 MenuCongif* InitMenuconf(GameConfig *cfg){
 
     MenuCongif* menu = new MenuCongif;
     
-    menu->height = (int)(cfg->height /3);
+    menu->height = 5;
     menu->width = cfg->width;
     menu->points = 0;
     menu->time_left = cfg->time;
-    menu->menu_win = newwin(menu->height, menu->width, 20,20);
+
+
+    int main_x;
+    int main_y;
+    getbegyx(cfg->win, main_y, main_x);
+
+    int menu_y = main_y + cfg->height;
+    int menu_x = main_x;
+
+
+
+    menu->menu_win = newwin(menu->height, menu->width, menu_y, menu_x);
 
     return menu;
 }

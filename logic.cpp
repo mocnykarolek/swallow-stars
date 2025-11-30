@@ -77,13 +77,23 @@ void gameLoop(GameConfig *cfg){
     STARS* s = star_array(cfg);
     MenuCongif* menu = InitMenuconf(cfg);
 
-    drawMenu(cfg ,menu);
-    
-
+    // drawMenu(cfg ,menu);
+    int fps = 1000000 / cfg->delay;
+    int timer = 0;
 
     while(gameStart){
         
+
+        timer++;
+        if (timer >= fps){
+            menu->time_left --;
+            timer = 0;
+        }
+
+        if (menu->time_left == 0) break;
         
+
+
         if(rand() % 20 == 0){
             for (int i = 0; i < cfg->max_stars; i++)
             {
@@ -151,16 +161,23 @@ void gameLoop(GameConfig *cfg){
         
         box(cfg->win, 0, 0);
 
+
+        drawMenu(menu, bird);
         wrefresh(cfg->win);
         usleep(delay);
 
         
+
         wrefresh(cfg->win);
 
     }
 
+    gameover(cfg);
 
 
 
+
+    delete[] s;
+    delete[] menu;
 
 }
