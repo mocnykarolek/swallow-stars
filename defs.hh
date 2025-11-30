@@ -36,6 +36,15 @@ struct GameConfig {
     WINDOW *win;    // Tu przechowuj wskaźnik na okno!
 };
 
+struct MenuCongif{
+    int width;
+    int height;
+    int time_left;
+    int points;
+
+    WINDOW *menu_win;
+};
+
 
 struct Bird {
     int position_x;

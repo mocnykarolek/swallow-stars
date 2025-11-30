@@ -18,3 +18,13 @@ void updateBirdPosition(GameConfig *cfg);
 void drawStar(GameConfig *cfg, STARS *s);
 
 void updateStarPosition(GameConfig *cfg, STARS *s);
+
+
+MenuCongif* InitMenuconf(GameConfig *cfg);
+
+void drawMenu(GameConfig *cfg, MenuCongif *menu);
+
+
+
+
+

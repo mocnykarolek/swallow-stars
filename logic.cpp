@@ -75,8 +75,9 @@ void gameLoop(GameConfig *cfg){
     init_bird(cfg);
     
     STARS* s = star_array(cfg);
-    
-    
+    MenuCongif* menu = InitMenuconf(cfg);
+
+    drawMenu(cfg ,menu);
     
 
 
@@ -152,6 +153,9 @@ void gameLoop(GameConfig *cfg){
 
         wrefresh(cfg->win);
         usleep(delay);
+
+        
+        wrefresh(cfg->win);
 
     }
 

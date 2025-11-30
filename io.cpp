@@ -69,7 +69,7 @@ void screenInitialization(GameConfig *cfg){
     raw();
     noecho();
 
-    int start_y = (max_height - cfg->height) / 2;
+    int start_y = ((max_height - cfg->height) / 2) - 10;
     int start_x = (max_width - cfg->width) / 2;
     cfg->win = newwin(cfg->height, cfg->width, start_y, start_x);
 
@@ -99,6 +99,27 @@ void updateStarPosition(GameConfig *cfg, STARS *s){
     move_star(s);
     mvwaddch(cfg->win, s->position_y, s->position_x, s->symbol);
 
+}
+
+void drawMenu(GameConfig *cfg, MenuCongif* menu){
+    MenuCongif* menuu = InitMenuconf(cfg);
+    
+    box(menuu->menu_win, 0,0);
+
+
+}
+
+MenuCongif* InitMenuconf(GameConfig *cfg){
+
+    MenuCongif* menu = new MenuCongif;
+    
+    menu->height = (int)(cfg->height /3);
+    menu->width = cfg->width;
+    menu->points = 0;
+    menu->time_left = cfg->time;
+    menu->menu_win = newwin(menu->height, menu->width, 20,20);
+
+    return menu;
 }
 
 
