@@ -1,7 +1,7 @@
 
-#include "defs.hh"   // Żeby main znał struktury (Bird, Star)
-#include "actors.hh" // Żeby main mógł wywołać init_bird()
-#include "io.hh"     // Żeby main mógł wywołać draw_screen()
+#include "defs.hh"   
+#include "actors.hh" 
+#include "io.hh"     
 #include "logic.hh"
 // TODO: spowolnic gwiazki
 // TODO: dodac kolizje z ptakiem i niszczyc gwizdki
@@ -15,10 +15,11 @@
 int main()
 {   
     GameConfig gamecfg;
+    Bird bird;
     confReader(&gamecfg);
 
     screenInitialization(&gamecfg);
-    gameLoop(&gamecfg);
+    gameLoop(&gamecfg, &bird);
 
     deleteWindow(&gamecfg);
 

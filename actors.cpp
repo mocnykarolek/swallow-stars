@@ -1,12 +1,13 @@
 #include "actors.hh"
 
-Bird bird;
+// Bird bird;
 
-void init_bird(GameConfig *cfg){
+void init_bird(GameConfig *cfg, Bird *bird){
 
-    bird.position_x = cfg->width /2;
-    bird.position_y = cfg->height /2;
-    bird.symbol = '>';
-    bird.lives_remaining = 5;
+    bird->position_x = cfg->width /2;
+    bird->position_y = cfg->height /2;
+    bird->symbol = '#';
+    bird->lives_remaining = 5;
 }
+
 

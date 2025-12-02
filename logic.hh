@@ -9,17 +9,17 @@
 #include <time.h>
 
 
-void gameLoop(GameConfig *cfg);
+void gameLoop(GameConfig *cfg, Bird *bird);
 
-void changeBirdDirection();
+void changeBirdDirection(Bird *bird);
 
-void detectBorderColission(GameConfig *cfg);
+void detectBorderColission(GameConfig *cfg, Bird *bird);
 
 STARS* star_array(GameConfig *cfg);
 
 void move_star(STARS *star);
 
-void changeGameSpeed();
+void changeGameSpeed(gs* gamespeed);
 
 
 #endif

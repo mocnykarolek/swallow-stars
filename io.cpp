@@ -2,18 +2,18 @@
 #include "actors.hh"
 #include "logic.hh"
 
-void draw_bird(GameConfig *cfg){
+void draw_bird(GameConfig *cfg, Bird *bird){
 
-    mvwaddch(cfg->win, bird.position_y, bird.position_x, bird.symbol);
+    mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
 }
 
-void updateBirdPosition(GameConfig *cfg){
+void updateBirdPosition(GameConfig *cfg, Bird *bird){
 
-    mvwaddch(cfg->win, bird.position_y, bird.position_x, ' ');
+    mvwaddch(cfg->win, bird->position_y, bird->position_x, ' ');
         
-    changeBirdDirection();
+    changeBirdDirection(bird);
         
-    mvwaddch(cfg->win, bird.position_y, bird.position_x, bird.symbol);
+    mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
 }
 
 void  confReader(GameConfig *cfg){
@@ -105,11 +105,11 @@ void updateStarPosition(GameConfig *cfg, STARS *s){
 
 }
 
-void drawMenu(MenuCongif* menu, Bird bird){
+void drawMenu(MenuCongif* menu, Bird *bird){
     
     werase(menu->menu_win);
     box(menu->menu_win, 0,0);
-    mvwprintw(menu->menu_win, 2, 1, "TIME: %d DIRECTIONS [W,A,S,D] CHANGE SPEED [o/p] EXIT [q] POINTS: %d LIVES: %d",menu->time_left, menu->points, bird.lives_remaining);
+    mvwprintw(menu->menu_win, 2, 1, "TIME: %d DIRECTIONS [W,A,S,D] CHANGE SPEED [o/p] EXIT [q] POINTS: %d LIVES: %d",menu->time_left, menu->points, bird->lives_remaining);
 
     wrefresh(menu->menu_win);
 }

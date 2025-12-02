@@ -1,6 +1,5 @@
 #include "defs.hh"
 
-extern Bird bird;
 
 
-void init_bird(GameConfig *cfg);
+void init_bird(GameConfig *cfg, Bird *bird);

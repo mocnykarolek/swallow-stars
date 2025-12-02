@@ -24,7 +24,7 @@
 struct GameConfig {
     int width;
     int height;
-    int delay;      // Tu przechowuj main_delay
+    int delay;    
     int max_stars;
     int min_stars;
     int max_opps;
@@ -33,7 +33,7 @@ struct GameConfig {
     int time;
     
 
-    WINDOW *win;    // Tu przechowuj wskaźnik na okno!
+    WINDOW *win;  
 };
 
 struct MenuCongif{
@@ -64,6 +64,15 @@ struct STARS {
 
 };
 
+struct gs{
+    int very_slow;
+    int slow;
+    int normal;
+    int fast;
+    int very_fast;
+    int current_speed;
+
+};
 
 
 
