@@ -7,6 +7,22 @@ void draw_bird(GameConfig *cfg, Bird *bird){
     mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
 }
 
+
+
+void drawHunter(GameConfig *cfg, hunter* h){
+    for (int i = 0; i <h->size.y; i++)
+    {
+        for (int j = 0; j < h->size.x; j++)
+        {
+            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, h->symbol);
+        }
+        
+    }
+    
+
+}
+
+
 void updateBirdPosition(GameConfig *cfg, Bird *bird){
 
     mvwaddch(cfg->win, bird->position_y, bird->position_x, ' ');

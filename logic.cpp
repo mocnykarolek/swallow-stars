@@ -8,7 +8,40 @@ void changeBirdDirection(Bird *bird){
 
 
 }
+void updateHunterPosition(hunter* h, GameConfig *cfg){
 
+    for (int i = 0; i <h->size.y; i++)
+    {
+        for (int j = 0; j < h->size.x; j++)
+        {
+            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, ' ');
+        }
+        
+    }
+    h->position_x += h->dx;
+    h->position_y += h->dy;
+
+    drawHunter(cfg, h);
+    
+    
+    
+
+
+}
+
+void changeHunterPosition(hunter* h){
+
+    h->dx *= -1;
+    h->dy *= -1;
+}
+
+
+
+// void detectHunterBorderCollision(hunter* h, GameConfig *cfg){
+
+//     // if(h->position_x == cfg->width)
+
+// }
 
 
 
@@ -92,6 +125,17 @@ void changeGameSpeed(gs* gamespeed, char input, int *delay){
 
 }
 
+
+void birdStarCollision(Bird* bird, STARS *star, MenuCongif* menu, GameConfig* cfg){
+
+    if(abs(bird->position_x - star->position_x) <= 1 && abs(bird->position_y-star->position_y) <=1 && star->alive == 1){
+        menu->points++;
+        star->alive = 0;
+        mvwaddch(cfg->win, star->position_y, star->position_x, ' ');
+    }
+}
+
+
 gs* init_gs(GameConfig *cfg){
     gs* gamespeed = new gs;
     gamespeed->normal = cfg->delay;
@@ -136,11 +180,30 @@ void gameLoop(GameConfig *cfg, Bird *bird){
     STARS* s = star_array(cfg);
     MenuCongif* menu = InitMenuconf(cfg);
 
+    hunter* hunters = hunters_array(cfg);
+
     // drawMenu(cfg ,menu);
     int fps = 1000000 / cfg->delay;
     int timer = 0;
 
     while(gameStart){
+        
+
+        if(rand() % 10 == 0){
+            for (int i = 0; i < cfg->max_opps; i++)
+            {
+                init_hunter(&hunters[i],bird ,cfg);
+                
+            }
+            
+        }
+
+        for (int i = 0; i < cfg->max_opps; i++)
+        {
+            if(hunters[i].bouces_left !=0){
+                updateHunterPosition(&hunters[i], cfg);
+            }
+        }
         
 
 
@@ -152,6 +215,8 @@ void gameLoop(GameConfig *cfg, Bird *bird){
 
         if (menu->time_left == 0) gameStart = false;
         
+
+
 
 
         if(rand() % 20 == 0){
@@ -168,13 +233,20 @@ void gameLoop(GameConfig *cfg, Bird *bird){
             
         }
 
+
         for (int i = 0; i < cfg->max_stars; i++)
         {
+
+            birdStarCollision(bird, &s[i], menu, cfg);
+
             if(s[i].alive == 1){
                 updateStarPosition(cfg , &s[i]);
             }
+
         }
     
+        
+
         
 
         wrefresh(cfg->win);

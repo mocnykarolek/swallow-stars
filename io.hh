@@ -7,6 +7,8 @@
 
 void draw_bird(GameConfig *cfg, Bird *bird);
 
+void drawHunter(GameConfig *cfg, hunter* h);
+
 void screenInitialization(GameConfig *cfg);
 
 void deleteWindow(GameConfig *cfg);

@@ -47,19 +47,22 @@ struct MenuCongif{
 
 
 struct Bird {
-    int position_x;
-    int position_y;
-    int dx, dy;
+    double position_x;
+    double position_y;
+    double dx, dy;
     char symbol;
+    double speed;
     int lives_remaining;
+    float dt;
 };
 
 struct STARS {
     char symbol;
     int speed;
-    int position_x;
-    int position_y;
+    double position_x;
+    double position_y;
     int alive;
+    float dt;
 
 
 };
@@ -74,6 +77,21 @@ struct gs{
 
 };
 
+struct hunter {
+    int position_x;
+    int position_y;
+    int dx;
+    int dy;
+    int bouces_left;
+    struct {int x; int y;} size;
+    char symbol = '&';
+
+};
+
+struct h_size {
+    int x;
+    int y;
+};
 
 
 #endif
