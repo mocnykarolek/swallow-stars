@@ -63,15 +63,18 @@ hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg){
     }
     float diff_x = bird->position_x - hunter->position_x;
     float diff_y = bird->position_y - hunter->position_y;
-    if (diff_x > 0) hunter->dx = 1;
-    else if (diff_x < 0) hunter->dx = -1;
-    else hunter->dx = 0;
+    
 
-    if (diff_y > 0) hunter->dy = 1;
-    else if (diff_y < 0) hunter->dy = -1;
-    else hunter->dy = 0;
+    float length = sqrt(diff_x * diff_x + diff_y + diff_y);
+    if(length == 0){
+        length =1;
+        diff_x=1;
+    } 
+    float speed = 0.5f;
+    hunter->dx = (diff_x / length) * speed;
+    hunter->dy = (diff_y / length) * speed;
 
-
+    hunter->in = false;
     return hunter;
 
     // hunter size random from tab list

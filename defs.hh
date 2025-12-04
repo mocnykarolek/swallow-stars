@@ -7,7 +7,8 @@
 #include <string.h> 
 
 #include <cstdio> 
-#include <cstdlib>
+// #include <cstdlib>
+#include <math.h>
 
 
 
@@ -86,6 +87,7 @@ struct hunter {
     struct {int x; int y;} size;
     char symbol = '&';
     int alive;
+    int in;
 
 };
 

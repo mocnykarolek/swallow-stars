@@ -13,12 +13,13 @@ void gameLoop(GameConfig *cfg, Bird *bird);
 
 void updateHunterPosition(hunter* h, GameConfig *cfg);
 
-void changeHunterDirection(hunter* h);
-// void detectHunterBorderCollision(hunter* h, GameConfig *cfg);
+// void changeHunterDirection(hunter* h);
+void detectHunterBorderCollision(hunter* h, GameConfig *cfg);
 
+void detectBirdHunterCollision(Bird *b, hunter* h);
+void didHunterEnter(hunter* h, GameConfig *cfg);
 
-
-
+void starOutsideBorder(STARS* star, GameConfig *cfg);
 void changeBirdDirection(Bird *bird);
 
 void detectBorderColission(GameConfig *cfg, Bird *bird);
