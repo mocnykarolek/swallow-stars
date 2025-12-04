@@ -29,7 +29,7 @@ void updateHunterPosition(hunter* h, GameConfig *cfg){
 
 }
 
-void changeHunterPosition(hunter* h){
+void changeHunterDirection(hunter* h){
 
     h->dx *= -1;
     h->dy *= -1;
@@ -189,10 +189,16 @@ void gameLoop(GameConfig *cfg, Bird *bird){
     while(gameStart){
         
 
-        if(rand() % 10 == 0){
+        if(rand() % 4 == 0){
             for (int i = 0; i < cfg->max_opps; i++)
             {
-                init_hunter(&hunters[i],bird ,cfg);
+                if(!hunters[i].alive){
+
+                    init_hunter(&hunters[i],bird ,cfg);
+
+                    break;
+
+                }
                 
             }
             
@@ -200,9 +206,12 @@ void gameLoop(GameConfig *cfg, Bird *bird){
 
         for (int i = 0; i < cfg->max_opps; i++)
         {
-            if(hunters[i].bouces_left !=0){
+            if(hunters[i].alive){
                 updateHunterPosition(&hunters[i], cfg);
             }
+
+            if(hunters[i].bouces_left == 0)
+                hunters[i].alive = false;
         }
         
 

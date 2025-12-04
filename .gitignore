@@ -12,3 +12,5 @@ out/
 *.obj
 *.exe
 *.class
+checksize.py
+temp.txt

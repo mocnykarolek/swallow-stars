@@ -78,13 +78,14 @@ struct gs{
 };
 
 struct hunter {
-    int position_x;
-    int position_y;
-    int dx;
-    int dy;
+    float position_x;
+    float position_y;
+    float dx;
+    float dy;
     int bouces_left;
     struct {int x; int y;} size;
     char symbol = '&';
+    int alive;
 
 };
 

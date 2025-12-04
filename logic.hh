@@ -13,7 +13,7 @@ void gameLoop(GameConfig *cfg, Bird *bird);
 
 void updateHunterPosition(hunter* h, GameConfig *cfg);
 
-void changeHunterPosition(hunter* h);
+void changeHunterDirection(hunter* h);
 // void detectHunterBorderCollision(hunter* h, GameConfig *cfg);
 
 

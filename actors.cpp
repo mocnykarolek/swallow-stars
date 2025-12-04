@@ -17,6 +17,10 @@ void init_bird(GameConfig *cfg, Bird *bird){
 hunter* hunters_array(GameConfig *cfg){
     
     hunter* hunters = new hunter[cfg->max_opps];
+    for(int i=0; i<cfg->max_opps; i++) {
+        hunters[i].alive = false;
+        hunters[i].bouces_left = 0;
+    }
 
     return hunters;
 }
@@ -28,7 +32,7 @@ hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg){
     int size = sizeof(rozmiary) / sizeof(rozmiary[0]);
 
     int rand_size = rand() % size;
-
+    hunter->alive = true;
     hunter->size.x = rozmiary[rand_size].x;
     hunter->size.y = rozmiary[rand_size].y;
 
@@ -40,22 +44,32 @@ hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg){
         case 0:
             hunter->position_x = cfg->height / 2;
             hunter->position_y = cfg->width -3;
+            break;
         case 1:
             hunter->position_x = cfg->height + 3;
             hunter->position_y = cfg->width /2;
+            break;
         case 2:
             hunter->position_x = cfg->height / 2;
             hunter->position_y = cfg->width +3;
+            break;
         case 3:
             hunter->position_x = cfg->height - 3;
             hunter->position_y = cfg->width /2;
+            break;
 
         default:
             break;
     }
-    hunter->dx = bird->dx;
-    hunter->dy = bird->dy;
-    
+    float diff_x = bird->position_x - hunter->position_x;
+    float diff_y = bird->position_y - hunter->position_y;
+    if (diff_x > 0) hunter->dx = 1;
+    else if (diff_x < 0) hunter->dx = -1;
+    else hunter->dx = 0;
+
+    if (diff_y > 0) hunter->dy = 1;
+    else if (diff_y < 0) hunter->dy = -1;
+    else hunter->dy = 0;
 
 
     return hunter;
