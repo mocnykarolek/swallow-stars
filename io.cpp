@@ -3,8 +3,39 @@
 #include "logic.hh"
 
 void draw_bird(GameConfig *cfg, Bird *bird){
+    switch(bird->lives_remaining){
+        case 5:
+            wattron(cfg->win, COLOR_PAIR(3));
+            mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
+            wattroff(cfg->win, COLOR_PAIR(3));
+            break;
+        case 4:
+            wattron(cfg->win, COLOR_PAIR(5));
+            mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
+            wattroff(cfg->win, COLOR_PAIR(5));
+            break;
+        case 3:
+            wattron(cfg->win, COLOR_PAIR(6));
+            mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
+            wattroff(cfg->win, COLOR_PAIR(6));
+            break;
+        case 2:
+            wattron(cfg->win, COLOR_PAIR(2));
+            mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
+            wattroff(cfg->win, COLOR_PAIR(2));
+            break;
+        case 1:
+            wattron(cfg->win, COLOR_PAIR(1));
+            mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
+            wattroff(cfg->win, COLOR_PAIR(1));
+            break;
 
-    mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
+        default:
+            mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
+            break;
+    }
+
+    
 }
 
 
@@ -23,13 +54,16 @@ void drawHunter(GameConfig *cfg, hunter* h){
 }
 
 
+
+
 void updateBirdPosition(GameConfig *cfg, Bird *bird){
 
     mvwaddch(cfg->win, bird->position_y, bird->position_x, ' ');
         
     changeBirdDirection(bird);
+    draw_bird(cfg, bird);
         
-    mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
+    // mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
 }
 
 void  confReader(GameConfig *cfg){
@@ -80,10 +114,17 @@ void screenInitialization(GameConfig *cfg){
     int max_width;
 
     initscr();
+    start_color();
     getmaxyx( stdscr, max_height, max_width);
     printf("%d %d\n", max_height, max_width);
     noecho();
     curs_set(0);
+    init_pair(1, COLOR_RED, COLOR_BLACK);   
+    init_pair(2, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(3, COLOR_GREEN, COLOR_BLACK);
+    init_pair(4, COLOR_CYAN, COLOR_BLACK);
+    init_pair(5, COLOR_BLUE, COLOR_BLACK);
+    init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
     
     keypad( stdscr, TRUE );
     raw();
@@ -111,20 +152,26 @@ void screenInitialization(GameConfig *cfg){
 
 
 void drawStar(GameConfig *cfg, STARS *s){
+    wattron(cfg->win, COLOR_PAIR(2));
     mvwaddch(cfg->win, s->position_y, s->position_x, s->symbol);
+    wattroff(cfg->win, COLOR_PAIR(2));
+
 }
 
 void updateStarPosition(GameConfig *cfg, STARS *s){
     mvwaddch(cfg->win, s->position_y, s->position_x, ' ');
     move_star(s);
+    wattron(cfg->win, COLOR_PAIR(2));
     mvwaddch(cfg->win, s->position_y, s->position_x, s->symbol);
-
+    wattroff(cfg->win, COLOR_PAIR(2));
 }
 
 void drawMenu(MenuCongif* menu, Bird *bird){
     
     werase(menu->menu_win);
+    wattron(menu->menu_win, COLOR_PAIR(4));
     box(menu->menu_win, 0,0);
+    wattroff(menu->menu_win, COLOR_PAIR(4));
     mvwprintw(menu->menu_win, 2, 1, "TIME: %d DIRECTIONS [W,A,S,D] CHANGE SPEED [o/p] EXIT [q] POINTS: %d LIVES: %d",menu->time_left, menu->points, bird->lives_remaining);
 
     wrefresh(menu->menu_win);
@@ -134,9 +181,16 @@ void gameover(GameConfig *cfg){
     
     nodelay(cfg->win, FALSE);
     mvwprintw(cfg->win, cfg->height/2, (cfg->width/2) - 4, "GAMEOVER");
-    wgetch(cfg->win);
+    char input;
+    do{
+        input = wgetch(cfg->win);
+    } while(input != 'q');
 }
-
+void drawBox(GameConfig *cfg){
+    wattron(cfg->win, COLOR_PAIR(4));
+    box(cfg->win, 0, 0);
+    wattroff(cfg->win, COLOR_PAIR(4));
+}
 
 MenuCongif* InitMenuconf(GameConfig *cfg){
 

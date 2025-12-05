@@ -21,7 +21,7 @@ void drawStar(GameConfig *cfg, STARS *s);
 
 void updateStarPosition(GameConfig *cfg, STARS *s);
 
-
+void drawBox(GameConfig *cfg);
 MenuCongif* InitMenuconf(GameConfig *cfg);
 
 void drawMenu(MenuCongif *menu, Bird *bird);

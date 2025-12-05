@@ -8,6 +8,7 @@ void changeBirdDirection(Bird *bird){
 
 
 }
+
 void updateHunterPosition(hunter* h, GameConfig *cfg){
 
     for (int i = 0; i <h->size.y; i++)
@@ -270,7 +271,7 @@ void gameLoop(GameConfig *cfg, Bird *bird){
 
 
     int gameStart = true;
-
+    flushinp();
     int input;
 
     init_bird(cfg, bird);
@@ -405,21 +406,21 @@ void gameLoop(GameConfig *cfg, Bird *bird){
                 break;
 
         }
+
         detectBorderColission(cfg, bird);
 
         updateBirdPosition(cfg, bird);
 
-        
-        box(cfg->win, 0, 0);
-
+        drawBox(cfg);
 
         drawMenu(menu, bird);
+
         wrefresh(cfg->win);
+
         usleep(delay);
 
-        
-
         wrefresh(cfg->win);
+
 
     }
 
@@ -427,7 +428,7 @@ void gameLoop(GameConfig *cfg, Bird *bird){
 
 
 
-
+    delete[] hunters;
     delete[] s;
     delete[] menu;
 

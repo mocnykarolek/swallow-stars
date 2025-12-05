@@ -32,7 +32,7 @@ struct GameConfig {
     int min_opps;
     
     int time;
-    
+    int level;
 
     WINDOW *win;  
 };
@@ -88,6 +88,7 @@ struct hunter {
     char symbol = '&';
     int alive;
     int in;
+    int type;
 
 };
 
