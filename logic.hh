@@ -20,7 +20,7 @@ void gameTimer(int *fps, int *timer, MenuCongif* menu);
 // void changeHunterDirection(hunter* h);
 void detectHunterBorderCollision(hunter* h, GameConfig *cfg);
 
-void detectBirdHunterCollision(Bird *b, hunter* h);
+void detectBirdHunterCollision(Bird *b, hunter* h, GameConfig* cfg);
 
 void didHunterEnter(hunter* h, GameConfig *cfg);
 

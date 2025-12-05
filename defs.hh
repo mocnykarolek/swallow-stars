@@ -38,6 +38,8 @@ struct GameConfig {
     int level;
     char name[32];
     int goal;
+    float speed_bound;
+    int damage_rule;
     WINDOW *win;  
 };
 

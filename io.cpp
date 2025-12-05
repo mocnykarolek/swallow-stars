@@ -185,7 +185,7 @@ void drawMenu(MenuCongif* menu, Bird *bird, GameConfig *cfg){
     box(menu->menu_win, 0,0);
     wattroff(menu->menu_win, COLOR_PAIR(4));
     // mvwprintw(menu->menu_win, 2, 1, "TIME: %d DIRECTIONS [W,A,S,D] CHANGE SPEED [o/p] EXIT [q] POINTS: %d LIVES: %d",menu->time_left, menu->points, bird->lives_remaining);
-    mvwprintw(menu->menu_win, 2, 5, "PLAYER: %d TIME: %d POINTS: %d GOAL: %d LIVES: %d LEVEL: %d",cfg->name ,menu->time_left, menu->points,cfg->goal, bird->lives_remaining, cfg->level);
+    mvwprintw(menu->menu_win, 2, 5, "PLAYER: %s TIME: %d POINTS: %d GOAL: %d LIVES: %d LEVEL: %d",cfg->name ,menu->time_left, menu->points,cfg->goal, bird->lives_remaining, cfg->level);
     wrefresh(menu->menu_win);
 }
 
@@ -308,6 +308,14 @@ void load_config(GameConfig *cfg){
         else if(strcmp(buff, "GOAL") == 0)
         {
             fscanf(fptr, "%d", &cfg->goal);
+        }
+        else if(strcmp(buff, "DAMAGE") == 0)
+        {
+            fscanf(fptr, "%d", &cfg->damage_rule);
+        }
+        else if(strcmp(buff, "SBOUNDS") == 0)
+        {
+            fscanf(fptr, "%f", &cfg->speed_bound);
         }
 
     }

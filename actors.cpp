@@ -79,7 +79,7 @@ hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg,h_size* template
         diff_x=1;
     }
     float speed = 0.5f;
-    switch(type){
+    switch((type % 3) +1){
         case 1:
             speed = 0.7f;
             break;

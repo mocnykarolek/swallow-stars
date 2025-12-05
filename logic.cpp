@@ -91,7 +91,7 @@ void didHunterEnter(hunter* h, GameConfig *cfg){
     
 }
 
-void detectBirdHunterCollision(Bird *b, hunter* h){
+void detectBirdHunterCollision(Bird *b, hunter* h, GameConfig* cfg){
 
     if (!h->alive) return;
     int birdx = (int)b->position_x;
@@ -105,7 +105,7 @@ void detectBirdHunterCollision(Bird *b, hunter* h){
 
     if(birdx >= hunterx && birdx <= huntermaxx){
         if(birdy >= huntery && birdy <= huntermaxy){
-            b->lives_remaining--;
+            b->lives_remaining-= cfg->damage_rule;
             // h->alive = false;
             return;
         }
@@ -174,11 +174,11 @@ void move_star(STARS *star){
 
 void changeGameSpeed(gs* gamespeed, char input, int *delay){
 
-    if (gamespeed->current_speed > 0 && input == 'o'){
+    if (gamespeed->current_speed > 0 && input == 'p'){
         gamespeed->current_speed --;
  
     }
-    if (gamespeed->current_speed < 4 && input == 'p'){
+    if (gamespeed->current_speed < 4 && input == 'o'){
         gamespeed->current_speed ++;
  
     }
@@ -232,10 +232,10 @@ gs* init_gs(GameConfig *cfg){
     gs* gamespeed = new gs;
     gamespeed->normal = cfg->delay;
     gamespeed->current_speed = 2;
-    gamespeed->slow = gamespeed->normal*0.9;
-    gamespeed->very_slow = gamespeed->normal*0.8;
-    gamespeed->fast = gamespeed->normal*1.1;
-    gamespeed->very_fast = gamespeed->normal*1.2;
+    gamespeed->slow = gamespeed->normal* (1 - cfg->speed_bound);
+    gamespeed->very_slow = gamespeed->normal* (1 - 2* cfg->speed_bound);
+    gamespeed->fast = gamespeed->normal*(1 + cfg->speed_bound);
+    gamespeed->very_fast = gamespeed->normal*(1 + 2*cfg->speed_bound);
  
     return gamespeed;
 }
@@ -350,7 +350,7 @@ void hunterBehaviour(GameConfig *cfg, hunter *hunters, Bird* bird, h_size* templ
             if(hunters[i].alive){
                 
                 updateHunterPosition(&hunters[i], cfg);
-                detectBirdHunterCollision(bird, &hunters[i]);
+                detectBirdHunterCollision(bird, &hunters[i], cfg);
             }
 
             if(hunters[i].bouces_left == 0)
