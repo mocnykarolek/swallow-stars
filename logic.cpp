@@ -11,14 +11,7 @@ void changeBirdDirection(Bird *bird){
 
 void updateHunterPosition(hunter* h, GameConfig *cfg){
 
-    for (int i = 0; i <h->size.y; i++)
-    {
-        for (int j = 0; j < h->size.x; j++)
-        {
-            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, ' ');
-        }
-        
-    }
+    clearHunter(h, cfg);
     h->position_x += h->dx;
     h->position_y += h->dy;
 
@@ -110,8 +103,8 @@ void detectBirdHunterCollision(Bird *b, hunter* h){
     int huntermaxx = (int)(hunterx+h->size.x);
     int huntermaxy = (int)(huntery+h->size.y);
 
-    if(birdx >= hunterx && birdx < huntermaxx){
-        if(birdy >= huntery && birdy < huntermaxy){
+    if(birdx >= hunterx && birdx <= huntermaxx){
+        if(birdy >= huntery && birdy <= huntermaxy){
             b->lives_remaining--;
             // h->alive = false;
             return;
@@ -247,6 +240,33 @@ gs* init_gs(GameConfig *cfg){
     return gamespeed;
 }
 
+void nextLevel(GameConfig *cfg, Bird *bird, STARS *stars, hunter *hunters, MenuCongif *menu) {
+
+    cfg->level ++;
+    init_bird(cfg, bird);
+
+    for (int i = 0; i < cfg->max_stars; i++)
+    {
+        stars[i].alive = false;
+        mvwaddch(cfg->win, stars[i].position_y, stars[i].position_x, ' ');
+    }
+    for (int i = 0; i < cfg->max_opps; i++)
+    {
+        hunters[i].alive = false;
+
+    }
+    
+    menu->time_left = cfg->time;
+
+    werase(cfg->win);
+    drawBox(cfg);
+    mvwprintw(cfg->win, cfg->height/2, cfg->width/2 - 5, "LEVEL %d", cfg->level);
+    wrefresh(cfg->win);
+    sleep(2);
+    mvwprintw(cfg->win, cfg->height/2, cfg->width/2 - 5, "        ", cfg->level);
+
+}
+
 
 void gameLoop(GameConfig *cfg, Bird *bird){
     
@@ -327,7 +347,7 @@ void gameLoop(GameConfig *cfg, Bird *bird){
             timer = 0;
         }
 
-        if (menu->time_left == 0) gameStart = false;
+        
         
 
 
@@ -404,6 +424,12 @@ void gameLoop(GameConfig *cfg, Bird *bird){
 
             default:
                 break;
+
+        }
+        if (menu->time_left <= 0 && bird->lives_remaining >0){
+            
+            nextLevel(cfg, bird, s, hunters, menu);
+            
 
         }
 

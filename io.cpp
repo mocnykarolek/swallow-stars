@@ -38,14 +38,45 @@ void draw_bird(GameConfig *cfg, Bird *bird){
     
 }
 
+void clearHunter(hunter* h, GameConfig *cfg){
 
+    for (int i = 0; i <h->size.y; i++)
+    {
+        for (int j = 0; j < h->size.x; j++)
+        {
+            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, ' ');
+        }
+        
+    }
+}
 
 void drawHunter(GameConfig *cfg, hunter* h){
     for (int i = 0; i <h->size.y; i++)
     {
         for (int j = 0; j < h->size.x; j++)
         {
+            switch(h->type){
+        case 1:
+            wattron(cfg->win, COLOR_PAIR(1) | A_BOLD);
             mvwaddch(cfg->win, h->position_y+i, h->position_x+i, h->symbol);
+            wattroff(cfg->win, COLOR_PAIR(1) | A_BOLD);
+            break;
+        case 2:
+            wattron(cfg->win, COLOR_PAIR(6) | A_BOLD);
+            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, h->symbol);
+            wattroff(cfg->win, COLOR_PAIR(6) | A_BOLD);
+            break;
+        case 3:
+            wattron(cfg->win, COLOR_PAIR(5) | A_BOLD);
+            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, h->symbol);
+            wattroff(cfg->win, COLOR_PAIR(5) | A_BOLD);
+            break;
+        default:
+            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, h->symbol);
+            break;
+
+    }
+            
         }
         
     }
@@ -97,7 +128,11 @@ void  confReader(GameConfig *cfg){
     // time left
     fgets(buffor, 100, fptr);
     cfg->time = atoi(buffor);
+    // level
+    fgets(buffor, 100, fptr);
+    cfg->level = atoi(buffor);
     
+
 
 
     fclose(fptr);

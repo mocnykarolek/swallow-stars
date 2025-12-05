@@ -3,7 +3,7 @@
 
 #include "actors.hh"
 
-
+void clearHunter(hunter* h, GameConfig *cfg);
 
 void draw_bird(GameConfig *cfg, Bird *bird);
 

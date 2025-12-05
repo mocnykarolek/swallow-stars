@@ -28,10 +28,11 @@ hunter* hunters_array(GameConfig *cfg){
 hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg){
 
     h_size rozmiary[] = {{2,1}, {1,2}, {2,2}};
+    int type = (rand() % 3) +1;
 
-    int size = sizeof(rozmiary) / sizeof(rozmiary[0]);
 
-    int rand_size = rand() % size;
+
+    int rand_size = type-1;
     hunter->alive = true;
     hunter->size.x = rozmiary[rand_size].x;
     hunter->size.y = rozmiary[rand_size].y;
@@ -69,8 +70,25 @@ hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg){
     if(length == 0){
         length =1;
         diff_x=1;
-    } 
+    }
     float speed = 0.5f;
+    switch(type){
+        case 1:
+            speed = 0.7f;
+            break;
+        case 2:
+            speed = 0.6f;
+            break;
+        case 3:
+            speed = 0.5f;
+            break;
+        default:
+            speed = 0.5f;
+            break;
+
+    }
+    hunter->type = type;
+    
     hunter->dx = (diff_x / length) * speed;
     hunter->dy = (diff_y / length) * speed;
 

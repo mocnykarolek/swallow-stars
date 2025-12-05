@@ -6,7 +6,7 @@
 #include "actors.hh"
 #include "io.hh"
 
-#include <time.h>
+
 
 
 void gameLoop(GameConfig *cfg, Bird *bird);
@@ -18,7 +18,7 @@ void detectHunterBorderCollision(hunter* h, GameConfig *cfg);
 
 void detectBirdHunterCollision(Bird *b, hunter* h);
 void didHunterEnter(hunter* h, GameConfig *cfg);
-
+void nextLevel(GameConfig *cfg, Bird *bird, STARS *stars, hunter *hunters, MenuCongif *menu);
 void starOutsideBorder(STARS* star, GameConfig *cfg);
 void changeBirdDirection(Bird *bird);
 
