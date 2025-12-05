@@ -4,16 +4,16 @@
 #include "io.hh"     
 #include "logic.hh"
 
-// TODO: dodac przeciwnikow
-// TODO: dodac kolory
-// TODO: gamestate
-// TODO: dodac levele
+
+
+// TODO: hunter template do configa
 
 
 
 
 int main()
 {   
+
     GameConfig gamecfg;
     Bird bird;
     confReader(&gamecfg);

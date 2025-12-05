@@ -40,42 +40,43 @@ void draw_bird(GameConfig *cfg, Bird *bird){
 
 void clearHunter(hunter* h, GameConfig *cfg){
 
-    for (int i = 0; i <h->size.y; i++)
+    for (int i = 0; i <h->size.x; i++)
     {
-        for (int j = 0; j < h->size.x; j++)
+        for (int j = 0; j < h->size.y; j++)
         {
-            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, ' ');
+            mvwaddch(cfg->win, h->position_y+j, h->position_x+i, ' ');
         }
         
     }
 }
 
 void drawHunter(GameConfig *cfg, hunter* h){
-    for (int i = 0; i <h->size.y; i++)
+    for (int i = 0; i <h->size.x; i++)
     {
-        for (int j = 0; j < h->size.x; j++)
+        for (int j = 0; j < h->size.y; j++)
         {
-            switch(h->type){
-        case 1:
-            wattron(cfg->win, COLOR_PAIR(1) | A_BOLD);
-            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, h->symbol);
-            wattroff(cfg->win, COLOR_PAIR(1) | A_BOLD);
-            break;
-        case 2:
-            wattron(cfg->win, COLOR_PAIR(6) | A_BOLD);
-            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, h->symbol);
-            wattroff(cfg->win, COLOR_PAIR(6) | A_BOLD);
-            break;
-        case 3:
-            wattron(cfg->win, COLOR_PAIR(5) | A_BOLD);
-            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, h->symbol);
-            wattroff(cfg->win, COLOR_PAIR(5) | A_BOLD);
-            break;
-        default:
-            mvwaddch(cfg->win, h->position_y+i, h->position_x+i, h->symbol);
-            break;
+            switch(h->type)
+            {
+                case 1:
+                    wattron(cfg->win, COLOR_PAIR(1) | A_BOLD);
+                    mvwaddch(cfg->win, h->position_y+j, h->position_x+i, h->symbol);
+                    wattroff(cfg->win, COLOR_PAIR(1) | A_BOLD);
+                    break;
+                case 2:
+                    wattron(cfg->win, COLOR_PAIR(6) | A_BOLD);
+                    mvwaddch(cfg->win, h->position_y+j, h->position_x+i, h->symbol);
+                    wattroff(cfg->win, COLOR_PAIR(6) | A_BOLD);
+                    break;
+                case 3:
+                    wattron(cfg->win, COLOR_PAIR(5) | A_BOLD);
+                    mvwaddch(cfg->win, h->position_y+j, h->position_x+i, h->symbol);
+                    wattroff(cfg->win, COLOR_PAIR(5) | A_BOLD);
+                    break;
+                default:
+                    mvwaddch(cfg->win, h->position_y+j, h->position_x+i, h->symbol);
+                    break;
 
-    }
+            }
             
         }
         
@@ -104,6 +105,9 @@ void  confReader(GameConfig *cfg){
     fptr = fopen("config.txt", "r");
 
     char buffor[100];
+    fgets(buffor, 100, fptr);
+    int parameters = atoi(buffor);
+
     // width
     fgets(buffor, 100, fptr);
     cfg->delay = atoi(buffor);
@@ -116,15 +120,9 @@ void  confReader(GameConfig *cfg){
     // max stars
     fgets(buffor, 100, fptr);
     cfg->max_stars = atoi(buffor);
-    // min stars
-    fgets(buffor, 100, fptr);
-    cfg->min_stars = atoi(buffor);
     // max opps
     fgets(buffor, 100, fptr);
     cfg->max_opps = atoi(buffor);
-    // min opps
-    fgets(buffor, 100, fptr);
-    cfg->min_stars = atoi(buffor);
     // time left
     fgets(buffor, 100, fptr);
     cfg->time = atoi(buffor);

@@ -253,6 +253,7 @@ void nextLevel(GameConfig *cfg, Bird *bird, STARS *stars, hunter *hunters, MenuC
     for (int i = 0; i < cfg->max_opps; i++)
     {
         hunters[i].alive = false;
+        clearHunter(&hunters[i], cfg);
 
     }
     
@@ -263,52 +264,65 @@ void nextLevel(GameConfig *cfg, Bird *bird, STARS *stars, hunter *hunters, MenuC
     mvwprintw(cfg->win, cfg->height/2, cfg->width/2 - 5, "LEVEL %d", cfg->level);
     wrefresh(cfg->win);
     sleep(2);
-    mvwprintw(cfg->win, cfg->height/2, cfg->width/2 - 5, "        ", cfg->level);
+    mvwaddstr(cfg->win, cfg->height/2, cfg->width/2 - 5, "        ");
 
 }
 
-
-void gameLoop(GameConfig *cfg, Bird *bird){
-    
+void HandleUserInput(GameConfig *cfg, Bird *bird, int *gameStart, int *input,gs* gamespeed,int *delay ){
     int horizontalBirdspeed = (int)(cfg->width/cfg->height);
     int verticalBirdSpeed = 1;
-    
-    gs* gamespeed = init_gs(cfg);
+    int *pDelay = delay;
+    *input = wgetch(cfg->win);
+        switch(*input){
+            case UP:
+                bird->dx = 0;
+                bird->dy = -verticalBirdSpeed;
+                break;
+            case DOWN:
+                bird->dx = 0;
+                bird->dy = verticalBirdSpeed;
+                break;
+
+            case LEFT:
+                bird->dx = -horizontalBirdspeed;
+                bird->dy = 0;
+                break;
+            case RIGHT:
+                bird->dx = horizontalBirdspeed;
+                bird->dy = 0;
+                break;
+            case FASTER:
+                changeGameSpeed(gamespeed, *input, pDelay);
+                break;
+
+            case SLOWER:
+                changeGameSpeed(gamespeed, *input, pDelay);
+                break;
+            
+
+            case 'q':
+                *gameStart = false;
+                break;
+
+            default:
+                break;
+
+        }
 
 
+}
 
+void gameTimer(int *fps, int* timer, MenuCongif* menu){
+    (*timer)++;
+    if (*timer >= *fps){
+        menu->time_left --;
+        *timer = 0;
+    }
 
-    srand(time(NULL));
+}
 
-    int delay = gamespeed->normal;
-    int *pDelay = &delay;
-    bird->symbol = '>';
-
-
-
-    box(cfg->win, 0, 0);
-    wrefresh(cfg->win);
-
-
-    int gameStart = true;
-    flushinp();
-    int input;
-
-    init_bird(cfg, bird);
-    
-    STARS* s = star_array(cfg);
-    MenuCongif* menu = InitMenuconf(cfg);
-
-    hunter* hunters = hunters_array(cfg);
-
-    // drawMenu(cfg ,menu);
-    int fps = 1000000 / cfg->delay;
-    int timer = 0;
-
-    while(gameStart){
-        
-
-        if(rand() % 50 == 0){
+void hunterBehaviour(GameConfig *cfg, hunter *hunters, Bird* bird){
+    if(rand() % 25 == 0){
             for (int i = 0; i < cfg->max_opps; i++)
             {
                 if(!hunters[i].alive){
@@ -333,27 +347,14 @@ void gameLoop(GameConfig *cfg, Bird *bird){
 
             if(hunters[i].bouces_left == 0)
                 hunters[i].alive = false;
-            
-
-
 
         }
-        
 
+}
 
-        timer++;
-        if (timer >= fps){
-            menu->time_left --;
-            timer = 0;
-        }
+void starBehaviour(GameConfig *cfg, Bird* bird, STARS* s, MenuCongif* menu){
 
-        
-        
-
-
-
-
-        if(rand() % 20 == 0){
+            if(rand() % 20 == 0){
             for (int i = 0; i < cfg->max_stars; i++)
             {
                 if(s[i].alive == 0){
@@ -381,51 +382,55 @@ void gameLoop(GameConfig *cfg, Bird *bird){
             starOutsideBorder(&s[i], cfg);
 
         }
+
+}
+
+
+void gameLoop(GameConfig *cfg, Bird *bird){
+    
+    
+    
+    gs* gamespeed = init_gs(cfg);
+
+    srand(time(NULL));
+
+    int delay = gamespeed->normal;
+    int *pDelay = &delay;
+
+
+    box(cfg->win, 0, 0);
+    wrefresh(cfg->win);
+
+
+    int gameStart = true;
+    flushinp();
+    int input;
+
+    init_bird(cfg, bird);
+    
+    STARS* s = star_array(cfg);
+    MenuCongif* menu = InitMenuconf(cfg);
+
+    hunter* hunters = hunters_array(cfg);
+
+    // drawMenu(cfg ,menu);
+    int fps = 1000000 / cfg->delay;
+    int timer = 0;
+
+    while(gameStart){
+        
+        hunterBehaviour(cfg, hunters, bird);
+
+        starBehaviour(cfg, bird, s, menu);
         
         if(bird->lives_remaining ==0) break;
         
-
-        
-
         wrefresh(cfg->win);
+        
+        HandleUserInput(cfg, bird, &gameStart, &input, gamespeed, &delay);
 
-        input = wgetch(cfg->win);
+        gameTimer(&fps, &timer, menu);
 
-        switch(input){
-            case UP:
-                bird->dx = 0;
-                bird->dy = -verticalBirdSpeed;
-                break;
-            case DOWN:
-                bird->dx = 0;
-                bird->dy = verticalBirdSpeed;
-                break;
-
-            case LEFT:
-                bird->dx = -horizontalBirdspeed;
-                bird->dy = 0;
-                break;
-            case RIGHT:
-                bird->dx = horizontalBirdspeed;
-                bird->dy = 0;
-                break;
-            case FASTER:
-                changeGameSpeed(gamespeed, input, pDelay);
-                break;
-
-            case SLOWER:
-                changeGameSpeed(gamespeed, input, pDelay);
-                break;
-            
-
-            case 'q':
-                gameStart = false;
-                break;
-
-            default:
-                break;
-
-        }
         if (menu->time_left <= 0 && bird->lives_remaining >0){
             
             nextLevel(cfg, bird, s, hunters, menu);

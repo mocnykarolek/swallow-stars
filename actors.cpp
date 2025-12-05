@@ -36,27 +36,27 @@ hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg){
     hunter->alive = true;
     hunter->size.x = rozmiary[rand_size].x;
     hunter->size.y = rozmiary[rand_size].y;
-
+    printf("%d, %d", hunter->size.x, hunter->size.y);
 
     hunter->bouces_left = 5;
     int side = rand() % 4;
     switch(side){
 
         case 0:
-            hunter->position_x = cfg->height / 2;
-            hunter->position_y = cfg->width -3;
+            hunter->position_y = cfg->height / 2;
+            hunter->position_x = cfg->width -3;
             break;
         case 1:
-            hunter->position_x = cfg->height + 3;
-            hunter->position_y = cfg->width /2;
+            hunter->position_y = cfg->height /2;
+            hunter->position_x = 1;
             break;
         case 2:
-            hunter->position_x = cfg->height / 2;
-            hunter->position_y = cfg->width +3;
+            hunter->position_y = 1;
+            hunter->position_x = cfg->width /2;
             break;
         case 3:
-            hunter->position_x = cfg->height - 3;
-            hunter->position_y = cfg->width /2;
+            hunter->position_y = cfg->height - 3;
+            hunter->position_x = cfg->width /2;
             break;
 
         default:
@@ -66,7 +66,7 @@ hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg){
     float diff_y = bird->position_y - hunter->position_y;
     
 
-    float length = sqrt(diff_x * diff_x + diff_y + diff_y);
+    float length = sqrt(diff_x * diff_x + diff_y * diff_y);
     if(length == 0){
         length =1;
         diff_x=1;
