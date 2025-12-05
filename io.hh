@@ -24,11 +24,13 @@ void updateStarPosition(GameConfig *cfg, STARS *s);
 void drawBox(GameConfig *cfg);
 MenuCongif* InitMenuconf(GameConfig *cfg);
 
-void drawMenu(MenuCongif *menu, Bird *bird);
+void drawMenu(MenuCongif *menu, Bird *bird, GameConfig *cfg);
 
 void gameover(GameConfig *cfg);
 
 void load_config(GameConfig *cfg);
 
 h_size* hunterTemplates(int *count);
+
+Levels* loadLevels(int* count);
 

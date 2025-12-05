@@ -24,7 +24,7 @@ void detectBirdHunterCollision(Bird *b, hunter* h);
 
 void didHunterEnter(hunter* h, GameConfig *cfg);
 
-void nextLevel(GameConfig *cfg, Bird *bird, STARS *stars, hunter *hunters, MenuCongif *menu);
+void nextLevel(GameConfig *cfg, Bird *bird, STARS *stars, hunter *hunters, MenuCongif *menu, Levels* l, int*lnum);
 
 void starOutsideBorder(STARS* star, GameConfig *cfg);
 

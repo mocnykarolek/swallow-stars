@@ -6,8 +6,10 @@
 
 
 
-// TODO: hunter template do configa
+// TODO: speed bound and damage rules
 
+
+// TODO: rozwinac hunter template o speed
 
 
 

@@ -55,22 +55,42 @@ void drawHunter(GameConfig *cfg, hunter* h){
     {
         for (int j = 0; j < h->size.y; j++)
         {
+            
             switch((h->type % 3) +1)
             {
                 case 1:
+                    if(i==0 && j ==0){
+                        wattron(cfg->win, COLOR_PAIR(1) | A_BOLD);
+                        mvwaddch(cfg->win, h->position_y+j, h->position_x+i, h->bouces_left + '0');
+                        wattroff(cfg->win, COLOR_PAIR(1) | A_BOLD);
+                    } else {
                     wattron(cfg->win, COLOR_PAIR(1) | A_BOLD);
                     mvwaddch(cfg->win, h->position_y+j, h->position_x+i, h->symbol);
                     wattroff(cfg->win, COLOR_PAIR(1) | A_BOLD);
+                    }
                     break;
                 case 2:
+                    if(i==0 && j ==0){
+                        wattron(cfg->win, COLOR_PAIR(6) | A_BOLD);
+                        mvwaddch(cfg->win, h->position_y+j, h->position_x+i, h->bouces_left + '0');
+                        wattroff(cfg->win, COLOR_PAIR(6) | A_BOLD); 
+                    } else {
                     wattron(cfg->win, COLOR_PAIR(6) | A_BOLD);
                     mvwaddch(cfg->win, h->position_y+j, h->position_x+i, h->symbol);
                     wattroff(cfg->win, COLOR_PAIR(6) | A_BOLD);
+                    }
                     break;
                 case 3:
+                    if(i==0 && j ==0){
+                        wattron(cfg->win, COLOR_PAIR(5) | A_BOLD);
+                        mvwaddch(cfg->win, h->position_y+j, h->position_x+i, h->bouces_left + '0');
+                        wattroff(cfg->win, COLOR_PAIR(5) | A_BOLD);
+
+                    } else {
                     wattron(cfg->win, COLOR_PAIR(5) | A_BOLD);
                     mvwaddch(cfg->win, h->position_y+j, h->position_x+i, h->symbol);
                     wattroff(cfg->win, COLOR_PAIR(5) | A_BOLD);
+                    }
                     break;
                 default:
                     mvwaddch(cfg->win, h->position_y+j, h->position_x+i, h->symbol);
@@ -98,44 +118,6 @@ void updateBirdPosition(GameConfig *cfg, Bird *bird){
     // mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
 }
 
-void  confReader(GameConfig *cfg){
-
-    FILE *fptr;
-
-    fptr = fopen("config.txt", "r");
-
-    char buffor[100];
-    // width
-    fgets(buffor, 100, fptr);
-    cfg->delay = atoi(buffor);
-    //height
-    fgets(buffor, 100, fptr);
-    cfg->width = atoi(buffor);
-    //delay
-    fgets(buffor, 100, fptr);
-    cfg->height = atoi(buffor);
-    // max stars
-    fgets(buffor, 100, fptr);
-    cfg->max_stars = atoi(buffor);
-    // max opps
-    fgets(buffor, 100, fptr);
-    cfg->max_opps = atoi(buffor);
-    // time left
-    fgets(buffor, 100, fptr);
-    cfg->time = atoi(buffor);
-    // level
-    fgets(buffor, 100, fptr);
-    cfg->level = atoi(buffor);
-    
-
-
-
-    fclose(fptr);
-    
-    printf("%d, %d, %d\n", cfg->delay, cfg->width, cfg->height);
-    // return atoi(buffor);
-    
-}
 
 
 void screenInitialization(GameConfig *cfg){
@@ -196,14 +178,14 @@ void updateStarPosition(GameConfig *cfg, STARS *s){
     wattroff(cfg->win, COLOR_PAIR(2));
 }
 
-void drawMenu(MenuCongif* menu, Bird *bird){
+void drawMenu(MenuCongif* menu, Bird *bird, GameConfig *cfg){
     
     werase(menu->menu_win);
     wattron(menu->menu_win, COLOR_PAIR(4));
     box(menu->menu_win, 0,0);
     wattroff(menu->menu_win, COLOR_PAIR(4));
-    mvwprintw(menu->menu_win, 2, 1, "TIME: %d DIRECTIONS [W,A,S,D] CHANGE SPEED [o/p] EXIT [q] POINTS: %d LIVES: %d",menu->time_left, menu->points, bird->lives_remaining);
-
+    // mvwprintw(menu->menu_win, 2, 1, "TIME: %d DIRECTIONS [W,A,S,D] CHANGE SPEED [o/p] EXIT [q] POINTS: %d LIVES: %d",menu->time_left, menu->points, bird->lives_remaining);
+    mvwprintw(menu->menu_win, 2, 5, "PLAYER: %d TIME: %d POINTS: %d GOAL: %d LIVES: %d LEVEL: %d",cfg->name ,menu->time_left, menu->points,cfg->goal, bird->lives_remaining, cfg->level);
     wrefresh(menu->menu_win);
 }
 
@@ -319,6 +301,14 @@ void load_config(GameConfig *cfg){
         {
             fscanf(fptr, "%d", &cfg->level);
         }
+        else if(strcmp(buff, "NAME") == 0)
+        {
+            fscanf(fptr, "%s", &cfg->name);
+        }
+        else if(strcmp(buff, "GOAL") == 0)
+        {
+            fscanf(fptr, "%d", &cfg->goal);
+        }
 
     }
 
@@ -330,4 +320,60 @@ void load_config(GameConfig *cfg){
 
     fclose(fptr);
 
+}
+Levels* loadLevels(int* count) { // count to wskaźnik, żeby zwrócić rozmiar
+    FILE *fptr = fopen("levels.txt", "r");
+    
+    // BHP: Sprawdź czy plik istnieje
+    if (fptr == NULL) {
+        *count = 0;
+        return NULL;
+    }
+
+    char buff[100];
+    *count = 0; // Poprawnie: zerujemy WARTOŚĆ pod wskaźnikiem
+
+    // 1. Wczytaj liczbę poziomów
+    fscanf(fptr, "%s", buff); // Czyta "LEVELSNUM"
+    if (strcmp(buff, "LEVELSNUM") == 0) {
+        fscanf(fptr, "%d", count); // Poprawnie: podajemy wskaźnik (bez &)
+    }
+
+    // 2. Alokacja
+    Levels* levels = new Levels[*count];
+
+    // 3. Pętla wczytująca
+    // Plik ma strukturę powtarzalną: LEVEL x, STARS x, TIME x...
+    // Czytamy to sekwencyjnie dla każdego poziomu
+    for (int i = 0; i < *count; i++) {
+        // Czytamy kolejne pary KLUCZ WARTOŚĆ
+        // Zakładamy, że w pliku zawsze jest komplet 6 parametrów na poziom
+        
+        // LEVEL
+        fscanf(fptr, "%s", buff); // Czyta "LEVEL"
+        fscanf(fptr, "%d", &levels[i].level); // Czyta numer (np. 1)
+
+        // STARS
+        fscanf(fptr, "%s", buff); 
+        fscanf(fptr, "%d", &levels[i].max_stars);
+
+        // TIME
+        fscanf(fptr, "%s", buff); 
+        fscanf(fptr, "%d", &levels[i].time_limit);
+
+        // OPPS
+        fscanf(fptr, "%s", buff); 
+        fscanf(fptr, "%d", &levels[i].max_opps);
+
+        // MAXBOUNCES
+        fscanf(fptr, "%s", buff); 
+        fscanf(fptr, "%d", &levels[i].max_bounces);
+
+        // SCORINGW
+        fscanf(fptr, "%s", buff); 
+        fscanf(fptr, "%d", &levels[i].scoring_weights);
+    }
+
+    fclose(fptr);
+    return levels;
 }

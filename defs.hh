@@ -31,11 +31,25 @@ struct GameConfig {
     int min_stars;
     int max_opps;
     int min_opps;
-    
+    int max_bounces;
+    int scoringw;
+
     int time;
     int level;
-
+    char name[32];
+    int goal;
     WINDOW *win;  
+};
+
+
+struct Levels{
+    int level;
+    int max_stars;
+    int time_limit;
+    int max_opps;
+    int max_bounces;
+    
+    int scoring_weights;
 };
 
 struct MenuCongif{

@@ -45,7 +45,7 @@ hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg,h_size* template
     hunter->size.y = rozmiary[rand_size].y;
     printf("%d, %d", hunter->size.x, hunter->size.y);
 
-    hunter->bouces_left = 5;
+    hunter->bouces_left = cfg->max_bounces;
     int side = rand() % 4;
     switch(side){
 

@@ -221,7 +221,7 @@ void starOutsideBorder(STARS* star, GameConfig *cfg){
 void birdStarCollision(Bird* bird, STARS *star, MenuCongif* menu, GameConfig* cfg){
 
     if(abs(bird->position_x - star->position_x) <= 1 && abs(bird->position_y-star->position_y) <=1 && star->alive == 1){
-        menu->points++;
+        menu->points += 1*cfg->scoringw;
         star->alive = 0;
         mvwaddch(cfg->win, star->position_y, star->position_x, ' ');
     }
@@ -240,9 +240,17 @@ gs* init_gs(GameConfig *cfg){
     return gamespeed;
 }
 
-void nextLevel(GameConfig *cfg, Bird *bird, STARS *stars, hunter *hunters, MenuCongif *menu) {
-
+void nextLevel(GameConfig *cfg, Bird *bird, STARS *stars, hunter *hunters, MenuCongif *menu, Levels* l, int*lnum) {
+    
     cfg->level ++;
+    if(cfg->level< *lnum){
+    cfg->max_opps = l[cfg->level-1].max_opps;
+    cfg->max_stars = l[cfg->level-1].max_stars;
+    cfg->time = l[cfg->level-1].time_limit;
+    cfg->max_bounces = l[cfg->level-1].max_bounces;
+    cfg->scoringw = l[cfg->level-1].scoring_weights;
+    }
+
     init_bird(cfg, bird);
 
     for (int i = 0; i < cfg->max_stars; i++)
@@ -391,7 +399,7 @@ void gameLoop(GameConfig *cfg, Bird *bird){
     
     
     gs* gamespeed = init_gs(cfg);
-
+    
     srand(time(NULL));
 
     int delay = gamespeed->normal;
@@ -401,8 +409,15 @@ void gameLoop(GameConfig *cfg, Bird *bird){
     box(cfg->win, 0, 0);
     wrefresh(cfg->win);
     int tcount;
-
+    int levels_num;
+    Levels * levels = loadLevels(&levels_num);
     h_size* templates = hunterTemplates(&tcount);
+    
+    cfg->max_opps = levels[0].max_opps;
+    cfg->max_stars = levels[0].max_stars;
+    cfg->time = levels[0].time_limit;
+    cfg->max_bounces = levels[0].max_bounces;
+    cfg->scoringw = levels[0].scoring_weights;
 
     int gameStart = true;
     flushinp();
@@ -412,7 +427,7 @@ void gameLoop(GameConfig *cfg, Bird *bird){
     
     STARS* s = star_array(cfg);
     MenuCongif* menu = InitMenuconf(cfg);
-
+    
     hunter* hunters = hunters_array(cfg);
 
     // drawMenu(cfg ,menu);
@@ -433,12 +448,13 @@ void gameLoop(GameConfig *cfg, Bird *bird){
 
         gameTimer(&fps, &timer, menu);
 
-        if (menu->time_left <= 0 && bird->lives_remaining >0){
-            
-            nextLevel(cfg, bird, s, hunters, menu);
+        if (cfg->goal - menu->points <= 0){
+            menu->points = 0;
+            nextLevel(cfg, bird, s, hunters, menu, levels, &levels_num);
             
 
         }
+        if (bird->lives_remaining <= 0 || menu->time_left <=0) break;
 
         detectBorderColission(cfg, bird);
 
@@ -446,7 +462,7 @@ void gameLoop(GameConfig *cfg, Bird *bird){
 
         drawBox(cfg);
 
-        drawMenu(menu, bird);
+        drawMenu(menu, bird, cfg);
 
         wrefresh(cfg->win);
 
@@ -458,9 +474,9 @@ void gameLoop(GameConfig *cfg, Bird *bird){
     }
 
     gameover(cfg);
-
-
-
+    delete[] levels;
+    delete[] gamespeed;
+    delete[] templates;
     delete[] hunters;
     delete[] s;
     delete[] menu;
