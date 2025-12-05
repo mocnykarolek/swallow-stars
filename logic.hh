@@ -8,7 +8,7 @@
 
 void gameLoop(GameConfig *cfg, Bird *bird);
 
-void hunterBehaviour(GameConfig *cfg, hunter *hunters, Bird* bird);
+void hunterBehaviour(GameConfig *cfg, hunter *hunters, Bird* bird ,h_size* templates, int*count);
 
 void starBehaviour(GameConfig *cfg, Bird* bird, STARS* s, MenuCongif* menu);
 

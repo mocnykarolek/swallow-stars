@@ -16,7 +16,10 @@ int main()
 
     GameConfig gamecfg;
     Bird bird;
-    confReader(&gamecfg);
+
+    load_config(&gamecfg);
+    // return 0;
+    // confReader(&gamecfg);
 
     screenInitialization(&gamecfg);
     gameLoop(&gamecfg, &bird);

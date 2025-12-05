@@ -321,13 +321,13 @@ void gameTimer(int *fps, int* timer, MenuCongif* menu){
 
 }
 
-void hunterBehaviour(GameConfig *cfg, hunter *hunters, Bird* bird){
+void hunterBehaviour(GameConfig *cfg, hunter *hunters, Bird* bird, h_size* templates, int*count){
     if(rand() % 25 == 0){
             for (int i = 0; i < cfg->max_opps; i++)
             {
                 if(!hunters[i].alive){
 
-                    init_hunter(&hunters[i],bird ,cfg);
+                    init_hunter(&hunters[i],bird ,cfg, templates, count);
 
                     break;
 
@@ -400,7 +400,9 @@ void gameLoop(GameConfig *cfg, Bird *bird){
 
     box(cfg->win, 0, 0);
     wrefresh(cfg->win);
+    int tcount;
 
+    h_size* templates = hunterTemplates(&tcount);
 
     int gameStart = true;
     flushinp();
@@ -419,7 +421,7 @@ void gameLoop(GameConfig *cfg, Bird *bird){
 
     while(gameStart){
         
-        hunterBehaviour(cfg, hunters, bird);
+        hunterBehaviour(cfg, hunters, bird, templates, &tcount);
 
         starBehaviour(cfg, bird, s, menu);
         

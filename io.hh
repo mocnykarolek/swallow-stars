@@ -28,6 +28,7 @@ void drawMenu(MenuCongif *menu, Bird *bird);
 
 void gameover(GameConfig *cfg);
 
+void load_config(GameConfig *cfg);
 
-
+h_size* hunterTemplates(int *count);
 

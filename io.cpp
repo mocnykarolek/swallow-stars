@@ -55,7 +55,7 @@ void drawHunter(GameConfig *cfg, hunter* h){
     {
         for (int j = 0; j < h->size.y; j++)
         {
-            switch(h->type)
+            switch((h->type % 3) +1)
             {
                 case 1:
                     wattron(cfg->win, COLOR_PAIR(1) | A_BOLD);
@@ -105,9 +105,6 @@ void  confReader(GameConfig *cfg){
     fptr = fopen("config.txt", "r");
 
     char buffor[100];
-    fgets(buffor, 100, fptr);
-    int parameters = atoi(buffor);
-
     // width
     fgets(buffor, 100, fptr);
     cfg->delay = atoi(buffor);
@@ -253,4 +250,84 @@ MenuCongif* InitMenuconf(GameConfig *cfg){
 void deleteWindow(GameConfig *cfg){
     delwin(cfg->win);
     endwin();
+}
+
+h_size* hunterTemplates(int *count)
+{
+    FILE *fptr;
+
+    fptr = fopen("huntertemplates.txt", "r");
+    char buff[100];
+    int ht_ammount = 0;
+
+    fscanf(fptr, "%s", buff);
+    if (strcmp(buff, "TEMPLATES") == 0)
+        fscanf(fptr, "%d", &ht_ammount);
+
+    h_size* templates = new h_size[ht_ammount];
+    for (int i = 0; i < ht_ammount; i++)
+    {
+        fscanf(fptr, "%d", &templates[i].x);
+        fscanf(fptr, "%d", &templates[i].y);
+    }
+    
+    fclose(fptr);
+    *count = ht_ammount;
+
+    return templates;
+
+}
+
+void load_config(GameConfig *cfg){
+    FILE *fptr;
+
+    fptr = fopen("config.txt", "r");
+
+
+
+
+
+    char buff[100];
+    
+
+    while(fscanf(fptr, "%s", buff) != EOF){
+
+        if(strcmp(buff, "DELAY") == 0){
+            fscanf(fptr, "%d", &cfg->delay);
+        }
+        else if(strcmp(buff, "WIDTH") == 0)
+        {
+            fscanf(fptr, "%d", &cfg->width);
+        }
+        else if(strcmp(buff, "HEIGHT") == 0)
+        {
+            fscanf(fptr, "%d", &cfg->height);
+        }
+        else if(strcmp(buff, "MAX_STARS") == 0)
+        {
+            fscanf(fptr, "%d", &cfg->max_stars);
+        }
+        else if(strcmp(buff, "MAX_OPPS") == 0)
+        {
+            fscanf(fptr, "%d", &cfg->max_opps);
+        }
+        else if(strcmp(buff, "TIME_LEFT") == 0)
+        {
+            fscanf(fptr, "%d", &cfg->time);
+        }
+        else if(strcmp(buff, "LEVEL") == 0)
+        {
+            fscanf(fptr, "%d", &cfg->level);
+        }
+
+    }
+
+ 
+
+
+
+
+
+    fclose(fptr);
+
 }

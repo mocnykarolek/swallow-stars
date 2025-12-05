@@ -25,10 +25,17 @@ hunter* hunters_array(GameConfig *cfg){
     return hunters;
 }
 
-hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg){
+hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg,h_size* templates, int*count){
+    
+    h_size rozmiary[*count];
+    for (int i = 0; i < *count; i++)
+    {
+        rozmiary[i].x = templates[i].x;
+        rozmiary[i].y = templates[i].y;
+    }
+    
 
-    h_size rozmiary[] = {{2,1}, {1,2}, {2,2}};
-    int type = (rand() % 3) +1;
+    int type = (rand() % *count) +1;
 
 
 
