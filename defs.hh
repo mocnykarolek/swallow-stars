@@ -6,8 +6,7 @@
 #include <stdio.h>
 #include <string.h> 
 
-// #include <cstdio> 
-// #include <cstdlib>
+
 #include <time.h>
 #include <math.h>
 

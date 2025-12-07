@@ -10,6 +10,8 @@ void gameLoop(GameConfig *cfg, Bird *bird);
 
 void hunterBehaviour(GameConfig *cfg, hunter *hunters, Bird* bird ,h_size* templates, int*count);
 
+void firstLevelInits(GameConfig *cfg, Levels* levels);
+
 void starBehaviour(GameConfig *cfg, Bird* bird, STARS* s, MenuCongif* menu);
 
 void HandleUserInput(GameConfig *cfg, Bird *bird, int *gameStart, int *input,gs* gamespeed,int *delay );
@@ -40,7 +42,11 @@ gs* init_gs(GameConfig *cfg);
 
 void changeGameSpeed(gs* gamespeed, char input, int *delay);
 
-
+void deallocate(Levels* levels, gs* gamespeed,h_size* templates, hunter* hunters, STARS* s, MenuCongif* menu);
 void birdStarCollision(Bird* bird, STARS *star, MenuCongif* menu, GameConfig* cfg);
+
+void mainLoop(GameConfig* cfg, Bird* bird, Levels* levels, gs* gamespeed, h_size* templates, hunter* hunters, STARS* s, MenuCongif* menu, 
+              int* tcount, int* levels_num, int* gameStart, int* input, int* delay, int* fps, int* timer);
+
 
 #endif

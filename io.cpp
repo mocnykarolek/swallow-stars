@@ -115,7 +115,7 @@ void updateBirdPosition(GameConfig *cfg, Bird *bird){
     changeBirdDirection(bird);
     draw_bird(cfg, bird);
         
-    // mvwaddch(cfg->win, bird->position_y, bird->position_x, bird->symbol);
+
 }
 
 
@@ -184,7 +184,7 @@ void drawMenu(MenuCongif* menu, Bird *bird, GameConfig *cfg){
     wattron(menu->menu_win, COLOR_PAIR(4));
     box(menu->menu_win, 0,0);
     wattroff(menu->menu_win, COLOR_PAIR(4));
-    // mvwprintw(menu->menu_win, 2, 1, "TIME: %d DIRECTIONS [W,A,S,D] CHANGE SPEED [o/p] EXIT [q] POINTS: %d LIVES: %d",menu->time_left, menu->points, bird->lives_remaining);
+
     mvwprintw(menu->menu_win, 2, 5, "PLAYER: %s TIME: %d POINTS: %d GOAL: %d LIVES: %d LEVEL: %d",cfg->name ,menu->time_left, menu->points,cfg->goal, bird->lives_remaining, cfg->level);
     wrefresh(menu->menu_win);
 }
@@ -329,55 +329,49 @@ void load_config(GameConfig *cfg){
     fclose(fptr);
 
 }
-Levels* loadLevels(int* count) { // count to wskaźnik, żeby zwrócić rozmiar
+Levels* loadLevels(int* count) { 
     FILE *fptr = fopen("levels.txt", "r");
     
-    // BHP: Sprawdź czy plik istnieje
+
     if (fptr == NULL) {
         *count = 0;
         return NULL;
     }
 
     char buff[100];
-    *count = 0; // Poprawnie: zerujemy WARTOŚĆ pod wskaźnikiem
+    *count = 0; 
 
-    // 1. Wczytaj liczbę poziomów
-    fscanf(fptr, "%s", buff); // Czyta "LEVELSNUM"
+    
+    fscanf(fptr, "%s", buff); 
     if (strcmp(buff, "LEVELSNUM") == 0) {
-        fscanf(fptr, "%d", count); // Poprawnie: podajemy wskaźnik (bez &)
+        fscanf(fptr, "%d", count); 
     }
 
-    // 2. Alokacja
     Levels* levels = new Levels[*count];
 
-    // 3. Pętla wczytująca
-    // Plik ma strukturę powtarzalną: LEVEL x, STARS x, TIME x...
-    // Czytamy to sekwencyjnie dla każdego poziomu
-    for (int i = 0; i < *count; i++) {
-        // Czytamy kolejne pary KLUCZ WARTOŚĆ
-        // Zakładamy, że w pliku zawsze jest komplet 6 parametrów na poziom
-        
-        // LEVEL
-        fscanf(fptr, "%s", buff); // Czyta "LEVEL"
-        fscanf(fptr, "%d", &levels[i].level); // Czyta numer (np. 1)
 
-        // STARS
+    for (int i = 0; i < *count; i++) {
+
+        
+
+        fscanf(fptr, "%s", buff); 
+        fscanf(fptr, "%d", &levels[i].level); 
+
+
         fscanf(fptr, "%s", buff); 
         fscanf(fptr, "%d", &levels[i].max_stars);
 
-        // TIME
+
         fscanf(fptr, "%s", buff); 
         fscanf(fptr, "%d", &levels[i].time_limit);
 
-        // OPPS
+
         fscanf(fptr, "%s", buff); 
         fscanf(fptr, "%d", &levels[i].max_opps);
 
-        // MAXBOUNCES
         fscanf(fptr, "%s", buff); 
         fscanf(fptr, "%d", &levels[i].max_bounces);
 
-        // SCORINGW
         fscanf(fptr, "%s", buff); 
         fscanf(fptr, "%d", &levels[i].scoring_weights);
     }

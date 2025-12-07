@@ -26,24 +26,15 @@ hunter* hunters_array(GameConfig *cfg){
 }
 
 hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg,h_size* templates, int*count){
-    
-    h_size rozmiary[*count];
-    for (int i = 0; i < *count; i++)
-    {
-        rozmiary[i].x = templates[i].x;
-        rozmiary[i].y = templates[i].y;
-    }
-    
-
-    int type = (rand() % *count) +1;
 
 
-
-    int rand_size = type-1;
+       
+    int type = (rand() % *count); 
     hunter->alive = true;
-    hunter->size.x = rozmiary[rand_size].x;
-    hunter->size.y = rozmiary[rand_size].y;
-    printf("%d, %d", hunter->size.x, hunter->size.y);
+    hunter->size.x = templates[type].x;
+    hunter->size.y = templates[type].y;
+
+    
 
     hunter->bouces_left = cfg->max_bounces;
     int side = rand() % 4;
@@ -102,7 +93,7 @@ hunter* init_hunter(hunter* hunter, Bird *bird ,GameConfig *cfg,h_size* template
     hunter->in = false;
     return hunter;
 
-    // hunter size random from tab list
+
 
 
 }

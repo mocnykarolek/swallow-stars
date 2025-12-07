@@ -27,11 +27,6 @@ void updateHunterPosition(hunter* h, GameConfig *cfg){
 
 }
 
-// void changeHunterDirection(hunter* h){
-
-//     h->dx *= -1;
-//     h->dy *= -1;
-// }
 
 
 
@@ -106,7 +101,6 @@ void detectBirdHunterCollision(Bird *b, hunter* h, GameConfig* cfg){
     if(birdx >= hunterx && birdx <= huntermaxx){
         if(birdy >= huntery && birdy <= huntermaxy){
             b->lives_remaining-= cfg->damage_rule;
-            // h->alive = false;
             return;
         }
     }
@@ -140,16 +134,6 @@ void detectBorderColission(GameConfig *cfg, Bird *bird){
 }
 
 
-// STARS* init_star(){
-//     STARS* stars[] = new STARS;
-//     star->symbol = '*';
-//     star->speed = 1;
-//     star->position_y =1;
-//     star->position_x =1;
-//     star->alive = 1;
-
-//     return star;
-// }
 
 STARS* star_array(GameConfig *cfg){
     
@@ -393,6 +377,73 @@ void starBehaviour(GameConfig *cfg, Bird* bird, STARS* s, MenuCongif* menu){
 
 }
 
+void firstLevelInits(GameConfig *cfg, Levels* levels){
+
+    cfg->max_opps = levels[0].max_opps;
+    cfg->max_stars = levels[0].max_stars;
+    cfg->time = levels[0].time_limit;
+    cfg->max_bounces = levels[0].max_bounces;
+    cfg->scoringw = levels[0].scoring_weights;
+
+
+}
+
+
+void deallocate(Levels* levels, gs* gamespeed,h_size* templates, hunter* hunters, STARS* s, MenuCongif* menu){
+    delete[] levels;
+    delete gamespeed;
+    delete[] templates;
+    delete[] hunters;
+    delete[] s;
+    delete menu;
+
+
+}
+
+
+
+void mainLoop(GameConfig* cfg, Bird* bird, Levels* levels, gs* gamespeed, h_size* templates, hunter* hunters, STARS* s, MenuCongif* menu, 
+              int* tcount, int* levels_num, int* gameStart, int* input, int* delay, int* fps, int* timer){
+    while(*gameStart){
+        
+        hunterBehaviour(cfg, hunters, bird, templates, tcount);
+
+        starBehaviour(cfg, bird, s, menu);
+        
+        if(bird->lives_remaining ==0) break;
+        
+        wrefresh(cfg->win);
+        
+        HandleUserInput(cfg, bird, gameStart, input, gamespeed, delay);
+
+        gameTimer(fps, timer, menu);
+
+        if (cfg->goal - menu->points <= 0){
+            menu->points = 0;
+            nextLevel(cfg, bird, s, hunters, menu, levels, levels_num);
+            
+
+        }
+        if (bird->lives_remaining <= 0 || menu->time_left <=0) break;
+
+        detectBorderColission(cfg, bird);
+
+        updateBirdPosition(cfg, bird);
+
+        drawBox(cfg);
+
+        drawMenu(menu, bird, cfg);
+
+        wrefresh(cfg->win);
+
+        usleep(*delay);
+
+        wrefresh(cfg->win);
+
+
+    }
+}
+
 
 void gameLoop(GameConfig *cfg, Bird *bird){
     
@@ -413,11 +464,7 @@ void gameLoop(GameConfig *cfg, Bird *bird){
     Levels * levels = loadLevels(&levels_num);
     h_size* templates = hunterTemplates(&tcount);
     
-    cfg->max_opps = levels[0].max_opps;
-    cfg->max_stars = levels[0].max_stars;
-    cfg->time = levels[0].time_limit;
-    cfg->max_bounces = levels[0].max_bounces;
-    cfg->scoringw = levels[0].scoring_weights;
+    firstLevelInits(cfg, levels);
 
     int gameStart = true;
     flushinp();
@@ -430,55 +477,13 @@ void gameLoop(GameConfig *cfg, Bird *bird){
     
     hunter* hunters = hunters_array(cfg);
 
-    // drawMenu(cfg ,menu);
+
     int fps = 1000000 / cfg->delay;
     int timer = 0;
 
-    while(gameStart){
-        
-        hunterBehaviour(cfg, hunters, bird, templates, &tcount);
-
-        starBehaviour(cfg, bird, s, menu);
-        
-        if(bird->lives_remaining ==0) break;
-        
-        wrefresh(cfg->win);
-        
-        HandleUserInput(cfg, bird, &gameStart, &input, gamespeed, &delay);
-
-        gameTimer(&fps, &timer, menu);
-
-        if (cfg->goal - menu->points <= 0){
-            menu->points = 0;
-            nextLevel(cfg, bird, s, hunters, menu, levels, &levels_num);
-            
-
-        }
-        if (bird->lives_remaining <= 0 || menu->time_left <=0) break;
-
-        detectBorderColission(cfg, bird);
-
-        updateBirdPosition(cfg, bird);
-
-        drawBox(cfg);
-
-        drawMenu(menu, bird, cfg);
-
-        wrefresh(cfg->win);
-
-        usleep(delay);
-
-        wrefresh(cfg->win);
-
-
-    }
+    mainLoop(cfg, bird, levels, gamespeed, templates, hunters, s, menu, &tcount, &levels_num,&gameStart, &input, &delay, &fps, &timer);
 
     gameover(cfg);
-    delete[] levels;
-    delete[] gamespeed;
-    delete[] templates;
-    delete[] hunters;
-    delete[] s;
-    delete[] menu;
+    deallocate(levels, gamespeed, templates, hunters, s, menu);
 
 }

@@ -5,9 +5,6 @@
 #include "logic.hh"
 
 
-// TODO: rozwinac hunter template o speed
-
-
 
 int main()
 {   
@@ -16,8 +13,6 @@ int main()
     Bird bird;
 
     load_config(&gamecfg);
-    // return 0;
-    // confReader(&gamecfg);
 
     screenInitialization(&gamecfg);
     gameLoop(&gamecfg, &bird);
